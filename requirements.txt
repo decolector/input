@@ -1,0 +1,3 @@
+JetFileII==0.0.1
+pyserial==2.7
+wsgiref==0.1.2
