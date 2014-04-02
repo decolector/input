@@ -1,0 +1,24 @@
+{
+  "name": "input",
+  "version": "0.0.1",
+  "homepage": "https://github.com/decolector/input",
+  "authors": [
+    "decolector <cmart@decolector.net>"
+  ],
+  "description": "webapp para input",
+  "main": "app/index.html",
+  "keywords": [
+    "interactive",
+    "net.art"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
