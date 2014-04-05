@@ -1,11 +1,14 @@
 #!/usr/bin/python
 
 import os
+import sys
 import time
 from datetime import datetime
 import re
 from threading import Thread, Timer
 from socket import *
+import logging
+logging.basicConfig()
 import requests as req
 from apscheduler.scheduler import Scheduler
 import xml.etree.ElementTree as ET
