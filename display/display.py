@@ -51,6 +51,7 @@ class LedDisplay(Thread):
 
  		s.connect((self.addr,self.port))
 		#send message and close connection
+		print "Sendong messsage"
 		s.send(self.msg)
 		s.close()
 
@@ -62,7 +63,8 @@ def readData(host, db_name, display_addr, display_port):
 		heads = {'content-type':'application/json'}
 		url = host + db_name + "/_all_docs"
 		res = req.get(url, headers=heads, params=ops)
-		print "Response from server: " + res
+
+		print "Response from server: " + res.text
 		
 		#create message
 		text = ''
@@ -73,13 +75,13 @@ def readData(host, db_name, display_addr, display_port):
 		for row in rows:
 			body = row['doc']['body']
 			auth = row['doc']['author']
-			linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '  + '{nl}'
+			linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
 
 			text += linea
 		
 
-		print "Message text : ", text
-
+		#print "Message text : ", text
+		print "Message built"
 		message = LedDisplay(display_addr, display_port)
 		message.createMessage(text)
 		message.start()
