@@ -62,7 +62,7 @@ def readData(host, db_name, display_addr, display_port):
 		heads = {'content-type':'application/json'}
 		url = host + db_name + "/_all_docs"
 		res = req.get(url, headers=heads, params=ops)
-		print "Response from server" + res
+		print "Response from server: " + res
 		
 		#create message
 		text = ''
