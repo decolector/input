@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$.couch.urlPrefix = "https://decolector.iriscouch.com";
+	$.couch.urlPrefix = "https://decolector.iriscouch.com/";
 
 	$.couch.info({
 		success:function(data){

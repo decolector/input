@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+	<config>
+		<host>https://decolector.iriscouch.com/</host>
+		<db_name>messages</db_name>
+		<endpoint>_all_docs</endpoint>
+		<display_addr>192.168.1.100</display_addr>
+		<display_port>9520</display_port>
+		<limit>20</limit>
+		<descending>1</descending>
+	</config>

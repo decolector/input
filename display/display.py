@@ -8,6 +8,7 @@ from threading import Thread, Timer
 from socket import *
 import requests as req
 from apscheduler.scheduler import Scheduler
+import xml.etree.ElementTree as ET
 
 from JetFileII import Font
 from JetFileII import Animate
@@ -32,7 +33,7 @@ class LedDisplay(Thread):
 		self.groupAddr = 1
 		self.unitAddr = 1
 		self.widthPixels = 120
-		self.heightPixels = 7	
+		self.heightPixels = 7
 		self.msg = None
 				
 
@@ -54,21 +55,25 @@ class LedDisplay(Thread):
 def readData(host, db_name, display_addr, display_port):
 		#Timer(10, readData(host, db_name, display_addr, display_port))
 		#get the data
-		ops = {'limit':'5', 'include_docs':'true', 'descending':'true'}
+		ops = {'limit':'20', 'include_docs':'true', 'descending':'true'}
 		heads = {'content-type':'application/json'}
 		url = host + db_name + "/_all_docs"
 		res = req.get(url, headers=heads, params=ops)
-		print res
+		print "Response from server" + res
 		
 		#create message
 		text = ''
+		#linea = '{red}{7x6}{slow}{moveleftin}{moveleftout}Esto es una prueba de animacion{nl}'
+	
 		tmp = res.json()
 		rows = tmp['rows']
 		for row in rows:
 			body = row['doc']['body']
 			auth = row['doc']['author']
-			linea = '{red}{7x6}{randomin}{randomout}' + str(auth) + " dice: " + body + '{nl}'
+			linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '  + '{nl}'
+
 			text += linea
+		
 
 		print "Message text : ", text
 
@@ -78,12 +83,19 @@ def readData(host, db_name, display_addr, display_port):
 
 
 def main():
-	HOST = "https://decolector.iriscouch.com/"
-	DB_NAME = "messages"
-	DISPLAY_ADDR = "192.168.1.105"
-	DISPLAY_PORT = 9520
+
+	config_file = "config.xml"
+	xml = ET.parse(config_file)
+	HOST = xml.find('host').text
+	DB_NAME = xml.find('db_name').text
+	DISPLAY_ADDR = xml.find("display_addr").text
+	DISPLAY_PORT = int(xml.find('display_port').text)
 	print "starting ..."
-	readData(HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT)
+
+	print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
+	#readData(HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT)
+
+
 
 	# Start the scheduler
 	sched = Scheduler()
@@ -105,39 +117,6 @@ def main():
 if __name__ == "__main__":
 	main()
 
-'''
-class MessageReader(Thread):
-	"""MessageReader reads messages from the web"""
-	def __init__(self, host, db_name):
-		super(MessageReader, self).__init__()
-		Thread.__init__(self)
-		self.host = host
-		self.db_name = db_name
-
-	def run(self):
-		#get the data
-		ops = {'limit':'5', 'include_docs':'true', 'descending':'false'}
-		heads = {'content-type':'application/json'}
-		url = self.host + self.db_name + "/_all_docs"
-		res = req.get(url, headers=heads, params=ops)
-		print res
-		
-		#create message
-		text = ''
-		tmp = res.json()
-		rows = tmp['rows']
-		for row in rows:
-			msg = row['doc']['body']
-			auth = row['doc']['author']
-			linea = '{red}{7x6}{randomin}{randomout}' + str(auth) + " dice: " + msg + '{nl}'
-			text += linea
-
-		print text
-
-
-		print msg
-
-'''
 	#configure http client
 	#base_url = "https://decolector.iriscouch.com/messages/"
 	#url =  base_url + '_all_docs'
