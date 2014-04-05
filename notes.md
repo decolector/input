@@ -32,3 +32,18 @@ echo $'\x01\x5A\x30\x30\x02\x41\x41\x06\x1B\x30\x62\x1C\x31\x1A\x31\x0A\x49\x31\
 echo $'\x01\x5A\x30\x30\x02\x41\x41\x06\x1B\x30\x62\x1C\x31\x1A\x31\x0A\x49\x31\x0A\x4F\x31\x57\x65\x6C\x63\x6F\x6D\x65\x04' > /dev/ttyp0
 
 '015A3030024141061B30621C311A310A49310A4F3162617204'
+
+
+# Input specs
+
+    * cola: 20 mensajes
+    * tiempo x mensaje: en relacion a la cantidad de caracteres ( 3 rondas )
+    * se mueven siempre a la izq
+    * autor y mensaje son campos requeridos
+    
+
+## Formato del mensaje
+
+lorem impsum (author)
+lorem ipsum - att: author
+
