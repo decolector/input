@@ -75,15 +75,15 @@ def readData(host, db_name, display_addr, display_port):
 		for row in rows:
 			body = row['doc']['body']
 			auth = row['doc']['author']
-			linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
-
+			#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
+			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + '  (' + str(auth) + ') '
 			text += linea
 		
 
 		#print "Message text : ", text
 		print "Message built"
 		message = LedDisplay(display_addr, display_port)
-		message.createMessage(text)
+		message.createMessage(text)	
 		message.start()
 
 

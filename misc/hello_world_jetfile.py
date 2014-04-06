@@ -1,11 +1,8 @@
 #!/usr/bin/python
 
 from socket import *
-from JetFileII import Font
-from JetFileII import Animate
-from JetFileII import Format
-from JetFileII import Date
-from JetFileII import Message
+
+from JetFileII import Message, Animate
 displayMsg = Message.DisplayControlWithoutChecksum
 
 import re
@@ -16,7 +13,11 @@ unitAddr = 1
 widthPixels = 120
 heightPixels = 7
 
-text = '{red}{7x6}{randomin}{randomout}Hello{nl}World{nl}JetFile{nl}'
+
+pausa = Animate.Pause.Seconds(0)
+print pausa
+
+text = '{red}{7x6}{moveleftin}{moveleftout}{slowest}{pause}Hola Mundo cruel que me haces trabajar tanto y ganar tan pocp, pero todo sea por el arte :,('
 print text
 msg = displayMsg.Create(1,text=text);
 print msg
