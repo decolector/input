@@ -16,7 +16,7 @@
     <header>
       <div class="container">
         <h1>Prohibido Rayar</h1>
-        <h2>Código y documentación del proyecto Prohibido rayar de Ana Maria Montenegro Jaramillo ( http://montenegrojaramillo.com )</h2>
+        <h2>Código y documentación del proyecto &quot;Prohibido rayar&quot; de Ana Maria Montenegro Jaramillo ( http://montenegrojaramillo.com )</h2>
 
         <section id="downloads">
           <a href="https://github.com/decolector/input/zipball/master" class="btn">Download as .zip</a>
@@ -28,7 +28,38 @@
 
     <div class="container">
       <section id="main_content">
-        <p>Prohibido rayar es un espacio publico de participación online e in - situ.  consiste en un aviso luminoso de leds y una pagina web desde donde los usuarios pueden enviar mensajes que serán mostrados en el aviso luminoso.</p>
+        <p>Prohibido rayar es un espacio abierto de participación que vincula la Galería Santafé con la web. Los participantes pueden enviar mensajes a través de una página web, que serán mostrados por una pantalla de leds instalada en la entrada de la galería.</p>
+
+<h2>
+<a name="hardware" class="anchor" href="#hardware"><span class="octicon octicon-link"></span></a>Hardware</h2>
+
+<h3>
+<a name="aviso-luminoso-de-leds" class="anchor" href="#aviso-luminoso-de-leds"><span class="octicon octicon-link"></span></a>Aviso luminoso de leds</h3>
+
+<p>El aviso de leds es fabricado por la compañía <a href="http://www.chainzone.com/">Chainzone</a> de china y existen varios distribuidores de esta tecnología.  Este aviso en particular tiene una matriz de leds 120 x 7 lo cual le permite desplegar una sola línea de color rojo y únicamente para espacios interiores. El aviso cuenta con tres puertos de comunicación: ethernet, RS232 y RS845.  Para este proyecto se consideró conveniente usar comunicación por red ( TCP ) a través del puerto ethernet.</p>
+
+<h3>
+<a name="raspberry-pi-model-b" class="anchor" href="#raspberry-pi-model-b"><span class="octicon octicon-link"></span></a>Raspberry Pi model B</h3>
+
+<p>Los mensajes son enviados al aviso a través de una red local ( LAN ) desde un computador embebido <a href="http://www.raspberrypi.org/">Raspberrypi</a> corriendo GNU/Linux ( <a href="http://www.raspbian.org/">Raspbian</a> ).  Este tipo de computador está diseñado para este tipo de proyectos, pues es de un tamaño bastante reducido y se adapta uy bien a diferentes situaciones de montaje.</p>
+
+<h3>
+<a name="router-inal%C3%A1mbrico-opcional" class="anchor" href="#router-inal%C3%A1mbrico-opcional"><span class="octicon octicon-link"></span></a>Router inalámbrico (opcional)</h3>
+
+<p>Igualmente se usó un router inalámbrico para conectar los dos dispositivos a una red protegida e independiente, esto no es indispensable para el funcionamiento del sistema, pues se podría usar cualquier red alámbrica o inalámbrica, sin embargo esta configuración permite mayor control sobre los componentes y evita los problemas que puede ocasionar el exceso de trafico en una red pública.</p>
+
+<h2>
+<a name="software" class="anchor" href="#software"><span class="octicon octicon-link"></span></a>Software</h2>
+
+<h3>
+<a name="display" class="anchor" href="#display"><span class="octicon octicon-link"></span></a>Display</h3>
+
+<p>Programa escrito en python que obtiene los mensajes de la base de datos en internet, los formatea y los envía al aviso usando el protocolo JetFileII. Este programa corre en la raspberrypi. Para la comunicación con la web se usó la librería <a href="https://github.com/johnoneil/LEDSign">LEDSign</a>, que implementa este protocolo en python.</p>
+
+<h3>
+<a name="aplicaci%C3%B3n-web" class="anchor" href="#aplicaci%C3%B3n-web"><span class="octicon octicon-link"></span></a>Aplicación web</h3>
+
+<p>Es la interfaz a través de la cual los usuarios pueden enviar mensajes al aviso.  Consiste en una forma con dos campos, (nombre y autor) y una lista con los últimos mensajes reproducidos en el aviso. La aplicación está desarrollada en javascript, css y html5, usando la librería <a href="http://angularjs.org/">angularjs</a> . La base de datos usada para almacenar y recuperar los mensajes es <a href="http://couchdb.org">couchdb</a>, cuya principal característica y ventaja es que las peticiones se realizan por http y la respuesta de la base de datos es formateada en json, lo cual la hace totalmente compatible con la web.</p>
       </section>
     </div>
 
