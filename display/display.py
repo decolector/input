@@ -51,7 +51,7 @@ class LedDisplay(Thread):
 
  		s.connect((self.addr,self.port))
 		#send message and close connection
-		print "Sendong messsage"
+		print "Sending messsage"
 		s.send(self.msg)
 		s.close()
 
@@ -76,7 +76,7 @@ def readData(host, db_name, display_addr, display_port):
 			body = row['doc']['body']
 			auth = row['doc']['author']
 			#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
-			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + '  (' + str(auth) + ') '
+			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(auth) + ') '
 			text += linea
 		
 
