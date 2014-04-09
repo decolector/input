@@ -21,6 +21,7 @@ from JetFileII import Message
 
 
 
+
 class LedDisplay(Thread):
 	"""Class to manage a led sign"""
 
@@ -52,8 +53,8 @@ class LedDisplay(Thread):
  		s.connect((self.addr,self.port))
 		#send message and close connection
 		print "Sending messsage"
-		s.send(self.msg)
-		s.close()
+		#s.send(self.msg)
+		#s.close()
 
 
 def readData(host, db_name, display_addr, display_port):
@@ -62,7 +63,7 @@ def readData(host, db_name, display_addr, display_port):
 		ops = {'limit':'20', 'include_docs':'true', 'descending':'true'}
 		heads = {'content-type':'application/json'}
 		url = host + db_name + "/_all_docs"
-		res = req.get(url, headers=heads, params=ops)
+		res = req.get(url, params=ops)
 
 		print "Response from server: " + res.text
 		
@@ -100,11 +101,8 @@ def main():
 	print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
 	#readData(HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT)
 
-
-
 	# Start the scheduler
 	sched = Scheduler()
-
 
 	# Schedule job_function to be called every two hours
 	sched.add_interval_job(readData, minutes=1, args = [HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT])
