@@ -49,7 +49,7 @@ class LedDisplay():
 		s = socket(AF_INET, SOCK_STREAM)
 
  		s.connect((self.addr,self.port))
-		send message and close connection
+		#send message and close connection
 		print "Sending messsage to display"
 		s.send(self.msg)
 		s.close()
