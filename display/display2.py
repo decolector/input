@@ -72,7 +72,8 @@ def readData(host, display_addr, display_port, limit):
 		#create message
 		text = ''
 		#linea = '{red}{7x6}{slow}{moveleftin}{moveleftout}Esto es una prueba de animacion{nl}'
-		res = requests.get('https://api.mongohq.com/databases/vital/collections/messages/documents?_apikey=6pnomhzb6yre2nifkc4u&sort={"date":-1}&limit=10')
+		params = {'_apikey': '6pnomhzb6yre2nifkc4u', 'sort': '{"date":-1}', 'limit', limit}
+		res = requests.get('https://api.mongohq.com/databases/vital/collections/messages/documents', params)
 	
 		tmp = res.json()
 		#print res.text
