@@ -58,10 +58,10 @@ class LedDisplay(Thread):
 		print "Message sent, now waiting for next db hit"
 
 
-def readData(host, display_addr, display_port):
+def readData(host, display_addr, display_port, limit):
 		#Timer(10, readData(host, db_name, display_addr, display_port))
 		#get the data
-		ops = {'limit':'5', 'sort':{'date': -1}}
+		ops = {'limit':limit, 'sort':{'date': -1}}
 		heads = {'content-type':'application/json'}
 		url = host
 		res = req.get(url, params=ops)
@@ -91,7 +91,7 @@ def readData(host, display_addr, display_port):
 		message = LedDisplay(display_addr, display_port)
 		message.createMessage(text)	
 		message.start()
-		print "message sent"
+		print "message sent, waiting now"
 
 
 def main():
@@ -104,6 +104,8 @@ def main():
 	DISPLAY_ADDR = xml.find("display_addr").text
 	DISPLAY_PORT = int(xml.find('display_port').text)
 	SECONDS = int(xml.find('seconds').text)
+	LIMIT = int(xml.find('limmit').text)
+
 	print "starting ..."
 
 	HOST = HOST_NAME + DB_NAME + ENDPOINT
@@ -113,7 +115,7 @@ def main():
 	sched = Scheduler()
 
 	# Schedule job_function to be called every two hours
-	sched.add_interval_job(readData, seconds=SECONDS, args = [HOST, DISPLAY_ADDR, DISPLAY_PORT])
+	sched.add_interval_job(readData, seconds=SECONDS, args = [HOST, DISPLAY_ADDR, DISPLAY_PORT, LIMIT])
 	sched.start()
 
 	try: 

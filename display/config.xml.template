@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 	<config>
-		<host_name>decolector.cloudant.com</host_name>
-		<db_name>messages</db_name>
-		<endpoint>_all_docs</endpoint>
+		<host_name>https://api.mongohq.com/</host_name>
+		<db_name>databases/vital/collections/messages/documents?</db_name>
+		<endpoint>_apikey=6pnomhzb6yre2nifkc4u</endpoint>
 		<display_addr>192.168.1.101</display_addr>
 		<display_port>9520</display_port>
-		<limit>1</limit>
+		<limit>60</limit>
 		<descending>1</descending>
-		<seconds>60</seconds>
-		<username>user</username>
-		<password>hackme</password>
+		<seconds>600</seconds>
+		<username>decolector</username>
+		<password>1234567890</password>
 	</config>
