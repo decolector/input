@@ -9,7 +9,7 @@ from threading import Thread, Timer
 from socket import *
 import logging
 logging.basicConfig()
-import requests as req
+import couchdbkit
 from apscheduler.scheduler import Scheduler
 import xml.etree.ElementTree as ET
 
@@ -22,16 +22,16 @@ from JetFileII import Message
 
 
 
-class LedDisplay(Thread):
+class LedDisplay():
 	"""Class to manage a led sign"""
 
-	def __init__(self, addr, port):
+	def __init__(self, db_host, db_name, display_addr, display_port, endpoint):
 
-		super(LedDisplay, self).__init__()
-		Thread.__init__(self)
+		#super(LedDisplay, self).__init__()
+		#Thread.__init__(self)
 		self.displayMsg = Message.DisplayControlWithoutChecksum
-		self.addr = addr
-		self.port = port
+		self.addr = display_addr
+		self.port = display_port
 		#configure display
 		#currently static values for my display
 		self.groupAddr = 1
@@ -39,73 +39,63 @@ class LedDisplay(Thread):
 		self.widthPixels = 120
 		self.heightPixels = 7
 		self.msg = None
-				
+		self.dbserver = couchdbkit.Server(db_host)
+		self.db = self.dbserver.get_or_create_db(db_name)
+		self.endpoint = endpoint
 
-	def createMessage(self, text):
+	def sendMessage(self, text):
 	 	self.msg = self.displayMsg.Create(1,text=text)
-
-
-
-	def run(self):
 		#create connection with display
-		s = socket(AF_INET, SOCK_STREAM)
+		#s = socket(AF_INET, SOCK_STREAM)
 
- 		s.connect((self.addr,self.port))
+ 		#s.connect((self.addr,self.port))
 		#send message and close connection
-		print "Sending messsage"
+		print "Sending messsage to display"
 		#s.send(self.msg)
 		#s.close()
 
 
-def readData(host, db_name, display_addr, display_port):
-		#Timer(10, readData(host, db_name, display_addr, display_port))
-		#get the data
-		ops = {'limit':'20', 'include_docs':'true', 'descending':'true'}
-		heads = {'content-type':'application/json'}
-		url = host + db_name + "/_all_docs"
-		res = req.get(url, params=ops)
-
-		print "Response from server: " + res.text
-		
-		#create message
+	def query(self):
+			
 		text = ''
-		#linea = '{red}{7x6}{slow}{moveleftin}{moveleftout}Esto es una prueba de animacion{nl}'
-	
-		tmp = res.json()
-		rows = tmp['rows']
-		for row in rows:
-			body = row['doc']['body']
-			auth = row['doc']['author']
-			#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
-			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(auth) + ') '
+		print 'Hitting database...'
+		for doc in self.db.all_docs( limit=5, descending=True, include_docs=True):
+			author = doc['doc']['author']
+			body = doc['doc']['body']
+			print 'message: ', body, ' by ', author
+			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                         '
 			text += linea
-		
 
-		#print "Message text : ", text
+		
 		print "Message built"
-		message = LedDisplay(display_addr, display_port)
-		message.createMessage(text)	
-		message.start()
+		self.sendMessage(text)
+
 
 
 def main():
 
 	config_file = "config.xml"
 	xml = ET.parse(config_file)
-	HOST = xml.find('host').text
+	HOST_NAME = xml.find('host_name').text
 	DB_NAME = xml.find('db_name').text
 	DISPLAY_ADDR = xml.find("display_addr").text
 	DISPLAY_PORT = int(xml.find('display_port').text)
+	ENDPOINT = xml.find("endpoint").text
+	SECONDS = int(xml.find("seconds").text)
+	USERNAME = xml.find("username").text
+	PASSWORD = xml.find("password").text
+
+	HOST = 'http://'+ USERNAME+ ':'+ PASSWORD + '@'+ HOST_NAME
+
 	print "starting ..."
-
-	print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
+	
+	#print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
 	#readData(HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT)
-
+	display = LedDisplay(HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT, ENDPOINT)
 	# Start the scheduler
 	sched = Scheduler()
 
-	# Schedule job_function to be called every two hours
-	sched.add_interval_job(readData, minutes=1, args = [HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT])
+	sched.add_interval_job(display.query, seconds=SECONDS )
 	sched.start()
 
 	try: 

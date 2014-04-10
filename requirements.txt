@@ -1,8 +1,11 @@
 APScheduler==2.1.2
-#JetFileII==0.0.1
--e git+https://github.com/decolector/LEDSign.git#egg=JetFileII
+JetFileII==0.0.1
+couchdbkit==0.6.5
 gnureadline==6.2.5
-#ipython==2.0.0
+http-parser==0.8.3
+ipython==2.0.0
 pyserial==2.7
 requests==2.2.1
+restkit==4.2.2
+socketpool==0.5.3
 wsgiref==0.1.2
