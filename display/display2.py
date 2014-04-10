@@ -12,6 +12,7 @@ logging.basicConfig()
 import requests as req
 from apscheduler.scheduler import Scheduler
 import xml.etree.ElementTree as ET
+import requests
 
 from JetFileII import Font
 from JetFileII import Animate
@@ -59,23 +60,24 @@ class LedDisplay(Thread):
 
 
 def readData(host, display_addr, display_port, limit):
-		#Timer(10, readData(host, db_name, display_addr, display_port))
-		#get the data
-		ops = {'limit':limit, 'sort':{'date': -1}}
-		heads = {'content-type':'application/json'}
-		url = host
-		res = req.get(url, params=ops)
+		# #Timer(10, readData(host, db_name, display_addr, display_port))
+		# #get the data
+		# ops = {'limit':limit, 'sort':{'date': -1}}
+		# heads = {'content-type':'application/json'}
+		# url = host
+		# res = req.get(url, params=ops)
 
 		#print "Response from server: " + res.text
 		
 		#create message
 		text = ''
 		#linea = '{red}{7x6}{slow}{moveleftin}{moveleftout}Esto es una prueba de animacion{nl}'
+		res = requests.get('https://api.mongohq.com/databases/vital/collections/messages/documents?_apikey=6pnomhzb6yre2nifkc4u&sort={"date":-1}&limit=10')
 	
 		tmp = res.json()
-		print res.text
+		#print res.text
 		
-		if tmp['error']:
+		if res.status_code != 200:
 			print "Error in response, trying later ..."
 
 		else:

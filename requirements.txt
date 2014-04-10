@@ -10,3 +10,4 @@ requests==2.2.1
 restkit==4.2.2
 socketpool==0.5.3
 wsgiref==0.1.2
+requests==2.2.1
