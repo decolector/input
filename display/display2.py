@@ -104,7 +104,7 @@ def main():
 	DISPLAY_ADDR = xml.find("display_addr").text
 	DISPLAY_PORT = int(xml.find('display_port').text)
 	SECONDS = int(xml.find('seconds').text)
-	LIMIT = int(xml.find('limmit').text)
+	LIMIT = int(xml.find('limit').text)
 
 	print "starting ..."
 
