@@ -74,24 +74,29 @@ def readData(host, display_addr, display_port, limit):
 	
 		tmp = res.json()
 		print res.text
-	
-		rows = tmp
+		
+		if tmp['error']:
+			print "Error in response, trying later ..."
 
-		for row in rows:
-			body = row['body']
-			author = row['author']
-			print "mensaje: " + body + " by: " + author
-			#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
-			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                        '
-			
-			text += linea
+		else:
+			print "succesfully aquired data from db"
+			rows = tmp
 
-		#print "Message text : ", text
-		print "Message built"
-		message = LedDisplay(display_addr, display_port)
-		message.createMessage(text)	
-		message.start()
-		print "message sent, waiting now"
+			for row in rows:
+				body = row['body']
+				author = row['author']
+				print "mensaje: " + body + " by: " + author
+				#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
+				linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                        '
+				
+				text += linea
+
+			#print "Message text : ", text
+			print "Message built"
+			message = LedDisplay(display_addr, display_port)
+			message.createMessage(text)	
+			message.start()
+
 
 
 def main():
