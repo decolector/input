@@ -61,7 +61,7 @@ class LedDisplay(Thread):
 def readData(host, display_addr, display_port):
 		#Timer(10, readData(host, db_name, display_addr, display_port))
 		#get the data
-		ops = {'limit':'5', 'sort':{'_id': -1}}
+		ops = {'limit':'5', 'sort':{'date': -1}}
 		heads = {'content-type':'application/json'}
 		url = host
 		res = req.get(url, params=ops)
@@ -91,6 +91,7 @@ def readData(host, display_addr, display_port):
 		message = LedDisplay(display_addr, display_port)
 		message.createMessage(text)	
 		message.start()
+		print "message sent"
 
 
 def main():
