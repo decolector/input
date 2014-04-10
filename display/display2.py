@@ -85,8 +85,8 @@ def readData(host, display_addr, display_port, limit):
 			rows = tmp
 
 			for row in rows:
-				body = row['body']
-				author = row['author']
+				body = row['body'].encode("utf-8")
+				author = row['author'].encode("utf-8")
 				print "mensaje: " + body + " by: " + author
 				#linea = '{red}{7x6}{slow}{moveleftin}{moverightout}' + body + '  (' + str(auth) + ') '
 				linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                        '
