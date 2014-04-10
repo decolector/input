@@ -55,11 +55,12 @@ class LedDisplay():
 		s.close()
 
 
+
 	def query(self):
 			
 		text = ''
 		print 'Hitting database...'
-		for doc in self.db.all_docs( limit=5, descending=True, include_docs=True):
+		for doc in self.db.all_docs( limit=5, descending=False, include_docs=True):
 			author = doc['doc']['author']
 			body = doc['doc']['body']
 			print 'message: ', body, ' by ', author
