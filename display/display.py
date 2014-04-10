@@ -46,13 +46,13 @@ class LedDisplay():
 	def sendMessage(self, text):
 	 	self.msg = self.displayMsg.Create(1,text=text)
 		#create connection with display
-		#s = socket(AF_INET, SOCK_STREAM)
+		s = socket(AF_INET, SOCK_STREAM)
 
- 		#s.connect((self.addr,self.port))
-		#send message and close connection
+ 		s.connect((self.addr,self.port))
+		send message and close connection
 		print "Sending messsage to display"
-		#s.send(self.msg)
-		#s.close()
+		s.send(self.msg)
+		s.close()
 
 
 	def query(self):
