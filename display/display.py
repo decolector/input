@@ -19,9 +19,6 @@ from JetFileII import Format
 from JetFileII import Date
 from JetFileII import Message
 
-
-
-
 class LedDisplay():
 	"""Class to manage a led sign"""
 
@@ -53,7 +50,6 @@ class LedDisplay():
 		print "Sending messsage to display"
 		s.send(self.msg)
 		s.close()
-
 
 
 	def query(self):

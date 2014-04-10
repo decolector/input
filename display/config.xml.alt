@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+	<config>
+		<host_name>https://api.mongohq.com/</host_name>
+		<db_name>databases/vital/collections/messages/documents?</db_name>
+		<endpoint>_apikey=6pnomhzb6yre2nifkc4u</endpoint>
+		<display_addr>192.168.1.105</display_addr>
+		<display_port>9520</display_port>
+		<limit>1</limit>
+		<descending>1</descending>
+		<seconds>30</seconds>
+	</config>
