@@ -61,7 +61,7 @@ class LedDisplay(Thread):
 def readData(host, display_addr, display_port):
 		#Timer(10, readData(host, db_name, display_addr, display_port))
 		#get the data
-		ops = {'limit':'5'}
+		ops = {'limit':'5', 'sort':{'_id': -1}}
 		heads = {'content-type':'application/json'}
 		url = host
 		res = req.get(url, params=ops)
@@ -73,8 +73,10 @@ def readData(host, display_addr, display_port):
 		#linea = '{red}{7x6}{slow}{moveleftin}{moveleftout}Esto es una prueba de animacion{nl}'
 	
 		tmp = res.json()
-
+		print res.text
+	
 		rows = tmp
+
 		for row in rows:
 			body = row['body']
 			author = row['author']
@@ -83,7 +85,6 @@ def readData(host, display_addr, display_port):
 			linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                        '
 			
 			text += linea
-		
 
 		#print "Message text : ", text
 		print "Message built"
