@@ -44,14 +44,14 @@ class LedDisplay(Thread):
 
 	def run(self):
 
-		#create connection with display
-		#s = socket(AF_INET, SOCK_STREAM)
+		create connection with display
+		s = socket(AF_INET, SOCK_STREAM)
 
- 		#s.connect((self.addr,self.port))
+ 		s.connect((self.addr,self.port))
 		#send message and close connection
-		#print "Sending messsage"
-		#s.send(self.msg)
-		#s.close()
+		print "Sending messsage"
+		s.send(self.msg)
+		s.close()
 		print "Message sent, now waiting for next db hit"
 
 
