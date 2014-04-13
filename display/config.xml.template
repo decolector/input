@@ -8,6 +8,7 @@
 		<limit>60</limit>
 		<descending>1</descending>
 		<seconds>600</seconds>
-		<username>decolector</username>
-		<password>1234567890</password>
+		<username>username</username>
+		<password>hackme</password>
+		<key>6pnomhzb6yre2nifkc4u</key>
 	</config>
