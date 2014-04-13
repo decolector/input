@@ -23,7 +23,7 @@ msg = displayMsg.Create(1,text=text);
 print msg
 
 s = socket(AF_INET, SOCK_STREAM)
-addr = ("192.168.1.105", 9520)
+addr = ("192.168.1.101", 9520)
 
 s.connect(addr)
 s.send(msg)
