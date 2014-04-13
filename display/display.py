@@ -97,10 +97,12 @@ def readData(host, display_addr, display_port, limit, key):
 			rows = tmp
 
 			for row in rows:
-				body = filterChars(row['body'].encode("utf-8"))
-				author = filterChars(row['author'].encode("utf-8"))
+				body = filterChars(row['body'])
+				author = filterChars(row['author'])
+				#body = filterChars(row['body'].encode("utf-8"))
+				#author = filterChars(row['author'].encode("utf-8"))
 				print "mensaje: " + body + " by: " + author
-				linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + str(author) + ')                        ' 
+				linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        ' 
 				text += linea
 
 			print "Message built"
