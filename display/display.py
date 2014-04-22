@@ -72,7 +72,7 @@ def readData(host, display_addr, display_port, limit, key):
         text = ''
 
         #build the request
-        params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': 100}
+        params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': limit}
         heads = {'content-type': 'application/json'}
         res = requests.get(host, headers=heads, params=params)
     
@@ -92,7 +92,7 @@ def readData(host, display_addr, display_port, limit, key):
             for i in range(len(msgs), int(totalMessages), 100):
                 res = requests.get(host, headers=heads, params={'_apikey': key,
                                                                 'sort': '{"date":-1}',
-                                                                'limit': 100,
+                                                                'limit': limit,
                                                                 'skip': i})
                 
                 for row in res.json():
