@@ -102,20 +102,20 @@ def writeToScreen(host, key, limit, batch):
     limit = 100
     
 
-    docs = getMessages(host, key, limit, heads)
+    docs = getMessages(host, key, limit)
 
     for i in range(0, len(docs), batch):
         text = ''
         for o in range(i, i+batch-1):
             doc = docs[o]
             if 'author' in doc and 'body' in doc:
-                author = doc['author']
-                body = doc['body']
+                author = filterChars(doc['author'])
+                body = filterChars(doc['body'])
 
                 line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
                 text += line
 
-        message = LedDisplay(display_addr, display_port)
+        message = LedDisplay('192.168.1.101', 9520)
         message.createMessage(str(text)) 
         message.start()
 
