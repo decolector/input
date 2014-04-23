@@ -37,7 +37,8 @@ class LedDisplay(Thread):
         self.msg = None
 
     def createMessage(self, text):
-        self.msg = self.displayMsg.Create(1, text=text)
+        #self.msg = self.displayMsg.Create(1, text=text)
+        self.msg = Message.WriteText(text, disk_partition='D', file_label='A')
 
     def run(self):
 
