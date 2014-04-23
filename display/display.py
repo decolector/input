@@ -68,51 +68,58 @@ def filterChars(words):
     return ns
 
 
-def readData(host, display_addr, display_port, limit, key):
-        #create message
-        text = ''
+def getMessages(host, key, limit):
+    print "query database"
 
-        #build the request
-        params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': 5}
-        heads = {'content-type': 'application/json'}
-        res = requests.get(host, headers=heads, params=params)
-    
-        msgs = []        
+    heads = {'content-type': 'application/json'}
+    params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': limit}
+    res = requests.get(host, headers=heads, params=params)
 
-        if res.status_code != 200:
-            print "Error in response:" + res.text
+    msgs = []
 
-        else:
-            print "succesfully aquired data from db"
+    if res.status_code != 200:
+        print "Error in response: " + res.text
+    else:
+        totalMessages = res.headers['X-Mongohq-Count']
+
+        for row in res.json():
+            msgs.append(row)
+
+        for i in range(len(msgs), int(totalMessages), 100):
+            res = requests.get(host, headers=heads, params={'_apikey': key,
+                                                            'sort': '{"date":-1}',
+                                                            'limit': limit,
+                                                            'skip': i})
             
-            totalMessages = res.headers['X-Mongohq-Count']
-
             for row in res.json():
                 msgs.append(row)
 
-            # for i in range(len(msgs), int(totalMessages), 100):
-            #     res = requests.get(host, headers=heads, params={'_apikey': key,
-            #                                                     'sort': '{"date":-1}',
-            #                                                     'limit': limit,
-            #                                                     'skip': i})
-                
-            #     for row in res.json():
-            #         msgs.append(row)
+    return msgs
 
-            for row in msgs:
-                if 'author' in row and 'body' in row:
-                    body = filterChars(row['body'])
-                    author = filterChars(row['author'])
-                    #body = filterChars(row['body'].encode("utf-8"))
-                    #author = filterChars(row['author'].encode("utf-8"))
-                    print "mensaje: " + body + " by: " + author
-                    linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
-                    text += linea
+def writeToScreen(host, key, limit, batch):
+    host = "https://api.mongohq.com/databases/vital/collections/messages/documents"
+    key = '6pnomhzb6yre2nifkc4u'
+    limit = 100
+    
 
-            print "Message built"
-            message = LedDisplay(display_addr, display_port)
-            message.createMessage(text) 
-            message.start()
+    docs = getMessages(host, key, limit, heads)
+
+    for i in range(0, len(docs), batch):
+        text = ''
+        for o in range(i, i+batch-1):
+            doc = docs[o]
+            if 'author' in doc and 'body' in doc:
+                author = doc['author']
+                body = doc['body']
+
+                line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
+                text += line
+
+        message = LedDisplay(display_addr, display_port)
+        message.createMessage(str(text)) 
+        message.start()
+
+        time.sleep(batch*3)
 
 
 def main():
@@ -137,12 +144,14 @@ def main():
     #HOST = HOST_NAME + DB_NAME + ENDPOINT
     print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
 
-    # Start the scheduler
-    sched = Scheduler()
+    writeToScreen(HOST, KEY, LIMIT, 10)
 
-    # Schedule job_function to be called every two hours
-    sched.add_interval_job(readData, seconds=SECONDS, args=[HOST, DISPLAY_ADDR, DISPLAY_PORT, LIMIT, KEY], start_date=datetime.now())
-    sched.start()
+    # # Start the scheduler
+    # sched = Scheduler()
+
+    # # Schedule job_function to be called every two hours
+    # sched.add_interval_job(readData, seconds=SECONDS, args=[HOST, DISPLAY_ADDR, DISPLAY_PORT, LIMIT, KEY], start_date=datetime.now())
+    # sched.start()
 
     try:
         while True:
