@@ -85,33 +85,31 @@ def getMessages(host, key, limit):
         for row in res.json():
             msgs.append(row)
 
-        for i in range(len(msgs), int(totalMessages), 100):
-            res = requests.get(host, headers=heads, params={'_apikey': key,
-                                                            'sort': '{"date":-1}',
-                                                            'limit': limit,
-                                                            'skip': i})
-            
-            for row in res.json():
-                msgs.append(row)
+#        for i in range(len(msgs), int(totalMessages), 100):
+#            res = requests.get(host, headers=heads, params={'_apikey': key,
+#                                                            'sort': '{"date":-1}',
+#                                                            'limit': limit,
+#                                                            'skip': i})
+#            
+#            for row in res.json():
+#                msgs.append(row)
 
     return msgs
 
-def writeToScreen(host, key, limit, batch):
-    host = "https://api.mongohq.com/databases/vital/collections/messages/documents"
-    key = '6pnomhzb6yre2nifkc4u'
-    limit = 100
-    
+def writeToScreen(host, key, limit, batch, time_message):
 
     docs = getMessages(host, key, limit)
 
     for i in range(0, len(docs), batch):
         text = ''
+        print 'Batch: %s to %s' %(i, i+batch-1)
+
         for o in range(i, i+batch-1):
             doc = docs[o]
             if 'author' in doc and 'body' in doc:
                 author = filterChars(doc['author'])
                 body = filterChars(doc['body'])
-
+                print "message: %s %s" % (body, author)
                 line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
                 text += line
 
@@ -119,7 +117,7 @@ def writeToScreen(host, key, limit, batch):
         message.createMessage(str(text)) 
         message.start()
 
-        time.sleep(batch*3)
+        time.sleep(batch*time_message)
 
 
 def main():
@@ -144,7 +142,9 @@ def main():
     #HOST = HOST_NAME + DB_NAME + ENDPOINT
     print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
 
-    writeToScreen(HOST, KEY, LIMIT, 10)
+    while True: 
+        time_message = 15
+        writeToScreen(HOST, KEY, LIMIT, 10, time_message)
 
     # # Start the scheduler
     # sched = Scheduler()
@@ -153,12 +153,12 @@ def main():
     # sched.add_interval_job(readData, seconds=SECONDS, args=[HOST, DISPLAY_ADDR, DISPLAY_PORT, LIMIT, KEY], start_date=datetime.now())
     # sched.start()
 
-    try:
-        while True:
-            time.sleep(0.1)
-    except KeyboardInterrupt:
-        print "terminating"
-        sched.shutdown()
+    #try:
+    #    while True:
+    #        time.sleep(0.1)
+    #except KeyboardInterrupt:
+    #    print "terminating"
+    #    sched.shutdown()
 
 
 if __name__ == "__main__":
