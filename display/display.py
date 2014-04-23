@@ -72,7 +72,7 @@ def readData(host, display_addr, display_port, limit, key):
         text = ''
 
         #build the request
-        params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': limit}
+        params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': 5}
         heads = {'content-type': 'application/json'}
         res = requests.get(host, headers=heads, params=params)
     
@@ -86,17 +86,17 @@ def readData(host, display_addr, display_port, limit, key):
             
             totalMessages = res.headers['X-Mongohq-Count']
 
-            for row in res.json():
-                msgs.append(row)
+            # for row in res.json():
+            #     msgs.append(row)
 
-            for i in range(len(msgs), int(totalMessages), 100):
-                res = requests.get(host, headers=heads, params={'_apikey': key,
-                                                                'sort': '{"date":-1}',
-                                                                'limit': limit,
-                                                                'skip': i})
+            # for i in range(len(msgs), int(totalMessages), 100):
+            #     res = requests.get(host, headers=heads, params={'_apikey': key,
+            #                                                     'sort': '{"date":-1}',
+            #                                                     'limit': limit,
+            #                                                     'skip': i})
                 
-                for row in res.json():
-                    msgs.append(row)
+            #     for row in res.json():
+            #         msgs.append(row)
 
             for row in msgs:
                 body = filterChars(row['body'])
