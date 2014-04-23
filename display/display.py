@@ -86,8 +86,8 @@ def readData(host, display_addr, display_port, limit, key):
             
             totalMessages = res.headers['X-Mongohq-Count']
 
-            # for row in res.json():
-            #     msgs.append(row)
+            for row in res.json():
+                msgs.append(row)
 
             # for i in range(len(msgs), int(totalMessages), 100):
             #     res = requests.get(host, headers=heads, params={'_apikey': key,
@@ -99,13 +99,14 @@ def readData(host, display_addr, display_port, limit, key):
             #         msgs.append(row)
 
             for row in msgs:
-                body = filterChars(row['body'])
-                author = filterChars(row['author'])
-                #body = filterChars(row['body'].encode("utf-8"))
-                #author = filterChars(row['author'].encode("utf-8"))
-                print "mensaje: " + body + " by: " + author
-                linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
-                text += linea
+                if 'author' in row and 'body' in row:
+                    body = filterChars(row['body'])
+                    author = filterChars(row['author'])
+                    #body = filterChars(row['body'].encode("utf-8"))
+                    #author = filterChars(row['author'].encode("utf-8"))
+                    print "mensaje: " + body + " by: " + author
+                    linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
+                    text += linea
 
             print "Message built"
             message = LedDisplay(display_addr, display_port)
