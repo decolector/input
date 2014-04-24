@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
-
 import os
 import sys
 import time
@@ -96,10 +96,9 @@ def getMessages(host, key, limit):
 
     return msgs
 
-def writeToScreen(host, key, limit, batch, time_message):
+def writeToScreen(host, key, limit, batch, time_message, display_addr, display_port):
 
     docs = getMessages(host, key, limit)
-    docs = docs[::-1]
 
     for i in range(0, len(docs), batch):
         text = ''
@@ -108,14 +107,15 @@ def writeToScreen(host, key, limit, batch, time_message):
         for o in range(i, i+batch-1):
             doc = docs[o]
             if 'author' in doc and 'body' in doc:
-                author = filterChars(doc['author'])
-                body = filterChars(doc['body'])
-                print "message: %s %s" % (body, author)
-                line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        '
+                author = filterChars(doc['author'].encode('utf-8', 'ignore'))
+                body = filterChars(doc['body'].encode('utf-8', 'ignore'))
+
+                print "message: %s >  %s" % (body, author)
+                line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body,author)
                 text += line
 
-        message = LedDisplay('192.168.1.101', 9520)
-        message.createMessage(str(text)) 
+        message = LedDisplay(display_addr, display_port)
+        message.createMessage(text) 
         message.start()
 
         time.sleep(batch*time_message)
@@ -137,6 +137,7 @@ def main():
     SECONDS = int(xml.find('seconds').text)
     LIMIT = int(xml.find('limit').text)
     KEY = xml.find('key').text
+    BATCH_TIME = int(xml.find('batch_time').text)
 
     print "Starting permitidorayar ..."
 
@@ -145,7 +146,7 @@ def main():
 
     while True: 
         time_message = 15
-        writeToScreen(HOST, KEY, LIMIT, 10, time_message)
+        writeToScreen(HOST, KEY, LIMIT, 10, time_message, DISPLAY_ADDR, DISPLAY_PORT)
 
     # # Start the scheduler
     # sched = Scheduler()
