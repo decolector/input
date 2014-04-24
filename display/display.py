@@ -99,6 +99,7 @@ def getMessages(host, key, limit):
 def writeToScreen(host, key, limit, batch, time_message):
 
     docs = getMessages(host, key, limit)
+    docs = docs[::-1]
 
     for i in range(0, len(docs), batch):
         text = ''
