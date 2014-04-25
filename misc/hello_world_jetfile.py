@@ -17,7 +17,7 @@ heightPixels = 7
 pausa = Animate.Pause.Seconds(0)
 print pausa
 
-text = '{red}{7x6}{moveleftin}{moveleftout}{slowest}{pause}Hola Mundo cruel que me haces trabajar tanto y ganar tan pocp, pero todo sea por el arte :,('
+text = '{red}{7x6}{moveleftin}{moveleftout}{slowest}{pause}Hola Mundo cruel que me haces trabajar tanto y ganar tan pocp, pero todo sea por el arte'
 print text
 msg = displayMsg.Create(1,text=text);
 print msg

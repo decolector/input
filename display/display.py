@@ -80,10 +80,12 @@ def readData(host, display_addr, display_port, limit, key):
 		#print "Response from server: " + res.text
 		
 		#create message
-		text = ''
+
 		#build the request
 
-		params = {'_apikey': key, 'sort': '{"date":-1}', 'limit': limit}
+		#params = {'_apikey': key, 'sort': '{"date":-1}', 'skip': '100', 'limit': limit}
+		params = {'_apikey': key, 'sort': '{"date":-1}','limit': limit}
+
 		res = requests.get(host, headers=heads, params = params)
 	
 		tmp = res.json()
@@ -93,18 +95,37 @@ def readData(host, display_addr, display_port, limit, key):
 			print "Error in response:" + res.text
 
 		else:
+
+			text = ''
+			raw = ''
+			f = open('all.txt', 'w')
+
 			print "succesfully aquired data from db"
-			rows = tmp
-
+			rows = res.json()
+			print "Desplegando " + str(len(rows))
+			print res.text
 			for row in rows:
-				body = filterChars(row['body'])
-				author = filterChars(row['author'])
-				#body = filterChars(row['body'].encode("utf-8"))
-				#author = filterChars(row['author'].encode("utf-8"))
-				print "mensaje: " + body + " by: " + author
-				linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        ' 
-				text += linea
 
+				try:
+
+					rbody = row['body'].encode("utf-8")
+					body = filterChars(row['body'])
+					rauthor = row['author'].encode("utf-8")
+					author = filterChars(row['author'])				
+					#body = filterChars(row['body'].encode("utf-8"))
+					#author = filterChars(row['author'].encode("utf-8"))
+					print "mensaje: " + body + " by: " + author
+					linea = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause}' + body + ' > (' + author + ')                        ' 
+					raw += rbody + ' > (' + rauthor + ')                        ' 
+					text += linea
+				except:
+
+					print 'paila'
+
+
+
+			f.write(raw)
+			f.close()
 			print "Message built"
 			message = LedDisplay(display_addr, display_port)
 			message.createMessage(text)	
