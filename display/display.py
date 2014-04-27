@@ -68,6 +68,20 @@ def filterChars(words):
     return ns
 
 
+def insertExtAscii(words):
+    """
+    Returns a string with a {extascii} tag inserted before every extended ascii char
+    """
+    ns = ""
+    for char in words:
+        if ord(char) < 128:
+            ns += '{extascii}' + char
+        else:
+            ns += char
+    return ns
+
+
+
 def getMessages(host, key, limit):
     print "query database"
 
