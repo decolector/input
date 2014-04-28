@@ -74,7 +74,7 @@ def insertExtAscii(words):
     """
     ns = ""
     for char in words:
-        if ord(char) < 128:
+        if ord(char) > 128:
             ns += '{extascii}' + char
         else:
             ns += char
@@ -122,9 +122,10 @@ def writeToScreen(host, key, limit, batch, time_message, display_addr, display_p
         for o in range(i, i+batch-1):
             doc = docs[o]
             if 'author' in doc and 'body' in doc:
-                author = filterChars(doc['author'].encode('utf-8', 'ignore'))
-                body = filterChars(doc['body'].encode('utf-8', 'ignore'))
-
+                #author = filterChars(doc['author'].encode('utf-8', 'ignore'))
+                #body = filterChars(doc['body'].encode('utf-8', 'ignore'))
+                author = insertExtAscii(doc['author'])
+                body = insertExtAscii(doc['body'])
                 print "message: %s >  %s" % (body, author)
                 line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body,author)
                 text += line
