@@ -115,7 +115,7 @@ def getMessages(host, key, limit):
 def writeToScreen(host, key, limit, batch, time_message, display_addr, display_port):
 
     try:
-        print "asking db for new messages"
+        print "init new messages routine"
         docs = getMessages(host, key, limit)
 
         for i in range(0, len(docs), batch):
@@ -170,8 +170,8 @@ def main():
     print HOST, DB_NAME, DISPLAY_ADDR, DISPLAY_PORT
 
     while True: 
-        time_message = 15
-        writeToScreen(HOST, KEY, LIMIT, 10, time_message, DISPLAY_ADDR, DISPLAY_PORT)
+        time_message = 13
+        writeToScreen(HOST, KEY, LIMIT, 5, time_message, DISPLAY_ADDR, DISPLAY_PORT)
 
     # # Start the scheduler
     # sched = Scheduler()
