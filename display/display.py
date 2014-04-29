@@ -111,30 +111,39 @@ def getMessages(host, key, limit):
 
     return msgs
 
+
 def writeToScreen(host, key, limit, batch, time_message, display_addr, display_port):
 
-    docs = getMessages(host, key, limit)
+    try:
+        print "asking db for new messages"
+        docs = getMessages(host, key, limit)
 
-    for i in range(0, len(docs), batch):
-        text = ''
-        print 'Batch: %s to %s' %(i, i+batch-1)
+        for i in range(0, len(docs), batch):
+            text = ''
+            print 'Batch: %s to %s' %(i, i+batch-1)
 
-        for o in range(i, i+batch-1):
-            doc = docs[o]
-            if 'author' in doc and 'body' in doc:
-                #author = filterChars(doc['author'].encode('utf-8', 'ignore'))
-                #body = filterChars(doc['body'].encode('utf-8', 'ignore'))
-                author = insertExtAscii(doc['author'])
-                body = insertExtAscii(doc['body'])
-                print "message: %s >  %s" % (body, author)
-                line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body,author)
-                text += line
+            for o in range(i, i+batch-1):
+                doc = docs[o]
+                if 'author' in doc and 'body' in doc:
+                    author_raw = filterChars(doc['author'].encode('utf-8', 'ignore'))
+                    body_raw = filterChars(doc['body'].encode('utf-8', 'ignore'))
+                    
+                    author = insertExtAscii(doc['author'].encode('utf-8', 'ignore'))
+                    body = insertExtAscii(doc['body'].encode('utf-8', 'ignore'))
+                    
+                    print "message: %s >  %s" % (body_raw, author_raw)
+                    line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body,author)
+                    print line
+                    text += line
 
-        message = LedDisplay(display_addr, display_port)
-        message.createMessage(text) 
-        message.start()
+            message = LedDisplay(display_addr, display_port)
+            message.createMessage(text) 
+            message.start()
 
-        time.sleep(batch*time_message)
+            time.sleep(batch*time_message)
+    except:
+        print "network error, waiting 10 seconds"
+        time.sleep(10)
 
 
 def main():
