@@ -128,11 +128,11 @@ def writeToScreen(host, key, limit, batch, time_message, display_addr, display_p
                     author_raw = filterChars(doc['author'].encode('utf-8', 'ignore'))
                     body_raw = filterChars(doc['body'].encode('utf-8', 'ignore'))
                     
-                    author = insertExtAscii(doc['author'].encode('utf-8', 'ignore'))
-                    body = insertExtAscii(doc['body'].encode('utf-8', 'ignore'))
+                    # author = insertExtAscii(doc['author'].encode('utf-8', 'ignore'))
+                    # body = insertExtAscii(doc['body'].encode('utf-8', 'ignore'))
                     
                     print "message: %s >  %s" % (body_raw, author_raw)
-                    line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body,author)
+                    line = '{red}{7x6}{slowest}{moveleftin}{moveleftout}{left}{left}{pause} %s > (%s)                        ' % (body_raw,author_raw)
                     print line
                     text += line
 
